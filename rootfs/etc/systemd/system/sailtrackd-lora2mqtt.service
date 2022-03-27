@@ -1,0 +1,8 @@
+[Unit]
+Description=SailTrackd - LoRa2MQTT
+
+[Service]
+ExecStart=/usr/bin/python3 /boot/sailtrack/sailtrackd/lora2mqtt.py
+
+[Install]
+WantedBy=multi-user.target
