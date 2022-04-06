@@ -1,0 +1,8 @@
+[Unit]
+Description=SailTrack-LoRa2MQTT
+
+[Service]
+ExecStart=/boot/sailtrack/sailtrack-lora2mqtt
+
+[Install]
+WantedBy=multi-user.target
