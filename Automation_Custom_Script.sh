@@ -4,7 +4,11 @@
 /boot/dietpi/func/dietpi-set_hardware wificountrycode "$(sed -n '/^[[:blank:]]*AUTO_SETUP_NET_WIFI_COUNTRY_CODE=/{s/^[^=]*=//p;q}' /boot/dietpi.txt)"
 
 # Uninstall OpenSSH Client
-dietpi-software uninstall 0
+/boot/dietpi/dietpi-software uninstall 0
+
+# Remove unused services
+G_EXEC rm /etc/systemd/system/dietpi-vpn.service
+G_EXEC rm /etc/systemd/system/dietpi-cloudshell.service
 
 # Configure RTC Module
 G_AGP fake-hwclock
@@ -17,16 +21,15 @@ G_AGI telegraf
 G_EXEC pip3 install -r /boot/sailtrack/requirements.txt
 
 # Enable services
-for s in /etc/systemd/system/sailtrack*.service; do
-  servicename=$(basename "$s" .service)
-  G_CONFIG_INJECT "+ $servicename" "+ $servicename" /boot/dietpi/.dietpi-services_include_exclude
-  /boot/dietpi/dietpi-services dietpi_controlled "$servicename"
-done
+G_CONFIG_INJECT "+ telegraf" "+ telegraf" /boot/dietpi/.dietpi-services_include_exclude
+G_CONFIG_INJECT "+ sailtrack-lora2mqtt" "+ sailtrack-lora2mqtt" /boot/dietpi/.dietpi-services_include_exclude
+G_EXEC /boot/dietpi/dietpi-services dietpi_controlled telegraf
+G_EXEC /boot/dietpi/dietpi-services dietpi_controlled sailtrack-lora2mqtt
 
 # Configure DietPi Banner
 settings=(1 1 1 0 0 1 0 1 0 0 0 0 0 0 0 0)
 for i in "${!settings[@]}"; do
-  echo "aENABLED[$i]=${settings[$i]}" >> /boot/dietpi/.dietpi-banner
+  G_CONFIG_INJECT "aENABLED\[$i]=" "aENABLED[$i]=${settings[$i]}" /boot/dietpi/.dietpi-banner
 done
 
 # Reboot after first boot is completed
