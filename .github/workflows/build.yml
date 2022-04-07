@@ -1,7 +1,6 @@
 name: Build image
 
 on:
-  workflow_dispatch:
   push:
     tags:
       - '*'
@@ -10,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      DIETPI_IMG_NAME: DietPi_RPi-ARMv6-Bullseye
-      OUTPUT_IMG_NAME: SailTrack-Ground_RPi-ARMv6-Bullseye
+      DIETPI_IMG_NAME: DietPi_RPi-ARMv8-Bullseye
+      OUTPUT_IMG_NAME: SailTrack-Ground_RPi-ARMv8-Bullseye
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

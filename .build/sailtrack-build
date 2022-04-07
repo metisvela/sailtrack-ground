@@ -46,7 +46,7 @@ mv "/tmp/sailtrack-build/$DIETPI_IMG_NAME/$DIETPI_IMG_NAME.img" "/tmp/sailtrack-
 echo -n "Generating hashes..."
 cat << _EOF_ > "/tmp/sailtrack-build/$DIETPI_IMG_NAME/hash.txt"
 FILE:   $OUTPUT_IMG_NAME.img
-DATE:   $(date)
+DATE:   $(date -u)
 MD5:    $(md5sum "/tmp/sailtrack-build/$DIETPI_IMG_NAME/$OUTPUT_IMG_NAME.img" | mawk '{print $1}')
 SHA1:   $(sha1sum "/tmp/sailtrack-build/$DIETPI_IMG_NAME/$OUTPUT_IMG_NAME.img" | mawk '{print $1}')
 SHA256: $(sha256sum "/tmp/sailtrack-build/$DIETPI_IMG_NAME/$OUTPUT_IMG_NAME.img" | mawk '{print $1}')
