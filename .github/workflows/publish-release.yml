@@ -1,12 +1,12 @@
-name: Build image
+name: Publish GitHub Release
 
 on:
   push:
     tags:
-      - '*'
+      - 'v*.*.*'
 
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
     env:
       DIETPI_IMG_NAME: DietPi_RPi-ARMv8-Bullseye
@@ -18,8 +18,8 @@ jobs:
       - name: Run SailTrack-Build
         run: sudo ./.build/sailtrack-build ${{ env.DIETPI_IMG_NAME }} ${{ env.OUTPUT_IMG_NAME }}
 
-      - name: Upload archive
-        uses: actions/upload-artifact@v3
+      - name: Publish release
+        uses: softprops/action-gh-release@v1
         with:
-          name: ${{ env.OUTPUT_IMG_NAME }}.7z
-          path: ${{ env.OUTPUT_IMG_NAME }}.7z
+          files: ${{ env.OUTPUT_IMG_NAME }}.7z
+          generate_release_notes: true
