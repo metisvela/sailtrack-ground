@@ -1,24 +1,14 @@
 . /boot/dietpi/func/dietpi-globals
 
-# Set WiFi Country Code
-/boot/dietpi/func/dietpi-set_hardware wificountrycode "$(sed -n '/^[[:blank:]]*AUTO_SETUP_NET_WIFI_COUNTRY_CODE=/{s/^[^=]*=//p;q}' /boot/dietpi.txt)"
-
-# Uninstall OpenSSH Client
-/boot/dietpi/dietpi-software uninstall 0
-
 # Remove unused services
 G_EXEC rm /etc/systemd/system/dietpi-vpn.service
 G_EXEC rm /etc/systemd/system/dietpi-cloudshell.service
 
-# Configure RTC Module
-G_AGP fake-hwclock
-G_CONFIG_INJECT "dtoverlay=i2c-rtc,ds3231" "dtoverlay=i2c-rtc,ds3231" /boot/config.txt
-G_EXEC sed -i "/systemd/,/fi/s/^/#/" /lib/udev/hwclock-set
-G_EXEC sed -i "/--systz/s/^/#/" /lib/udev/hwclock-set
+# Uninstall OpenSSH Client
+/boot/dietpi/dietpi-software uninstall 0
 
-# Install packages
+# Install Telegraf
 G_AGI telegraf
-G_EXEC pip3 install -r /boot/sailtrack/requirements.txt
 
 # Enable services
 G_CONFIG_INJECT "+ telegraf" "+ telegraf" /boot/dietpi/.dietpi-services_include_exclude
