@@ -1,20 +1,21 @@
 . /boot/dietpi/func/dietpi-globals
 
-# Remove unused services
+# Remove unused components
 G_EXEC rm /etc/systemd/system/dietpi-vpn.service
 G_EXEC rm /etc/systemd/system/dietpi-cloudshell.service
-
-# Uninstall OpenSSH Client
 /boot/dietpi/dietpi-software uninstall 0
 
-# Install Telegraf
+# Install required packages
 G_AGI telegraf
+G_EXEC pip3 install paho-mqtt
 
 # Enable services
 G_CONFIG_INJECT "+ telegraf" "+ telegraf" /boot/dietpi/.dietpi-services_include_exclude
 G_CONFIG_INJECT "+ sailtrack-lora2mqtt" "+ sailtrack-lora2mqtt" /boot/dietpi/.dietpi-services_include_exclude
+G_CONFIG_INJECT "+ sailtrack-timesync" "+ sailtrack-timesync" /boot/dietpi/.dietpi-services_include_exclude
 G_EXEC /boot/dietpi/dietpi-services dietpi_controlled telegraf
 G_EXEC /boot/dietpi/dietpi-services dietpi_controlled sailtrack-lora2mqtt
+G_EXEC /boot/dietpi/dietpi-services dietpi_controlled sailtrack-timesync
 
 # Configure DietPi Banner
 settings=(1 1 1 0 0 1 0 1 0 0 0 0 0 0 0 0)
