@@ -8,6 +8,9 @@ G_EXEC rm /etc/systemd/system/dietpi-cloudshell.service
 # Install required packages
 G_AGI telegraf
 G_EXEC pip3 install paho-mqtt
+G_EXEC pip3 install timeloop
+G_EXEC pip3 install pyserial
+G_EXEC pip3 install dpath
 
 # Enable services
 G_CONFIG_INJECT "+ telegraf" "+ telegraf" /boot/dietpi/.dietpi-services_include_exclude
