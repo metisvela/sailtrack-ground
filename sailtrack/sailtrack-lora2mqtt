@@ -1,3 +1,80 @@
-#!/bin/bash
+#!/usr/bin/env python3
+
+import json
+import logging
+from configparser import ConfigParser
+from datetime import timedelta
+
+from dpath.util import new
+from paho.mqtt.client import Client
+from serial import Serial
+
+# -------------------------- Configuration -------------------------- #
+from timeloop import Timeloop
+
+LOG_PRINT_FREQ_HZ = 0.1
+
+MQTT_CLIENT_ID = "sailtrack-lora2mqtt"
+CONFIG_FILE_PATH = "/etc/sailtrack/sailtrack.conf"
+
+LORA_SERIAL_PORT_NAME = "/dev/ttyAMA0"
+LORA_METRICS = (
+    ("sensor/gps0", "fixType"),
+    ("sensor/gps0", "epoch"),
+    ("sensor/gps0", "lon"),
+    ("sensor/gps0", "lat"),
+    ("sensor/gps0", "gSpeed"),
+    ("sensor/gps0", "headMot"),
+    ("sensor/imu0", "euler.x"),
+    ("sensor/imu0", "euler.y"),
+    ("sensor/imu0", "euler.z"),
+)
+
+LOG_JOB_INTERVAL_SEC = 1 / LOG_PRINT_FREQ_HZ
+
+# ------------------------------------------------------------------- #
+
+published_messages = 0
+received_packets = 0
 
 
+def on_publish_callback(client, userdata, mid):
+    global published_messages
+    published_messages += 1
+
+
+config = ConfigParser()
+config.read(CONFIG_FILE_PATH)
+mqtt = Client(MQTT_CLIENT_ID)
+mqtt.username_pw_set(config["mqtt"]["username"], config["mqtt"]["password"])
+mqtt.on_publish = on_publish_callback
+mqtt.connect(config["mqtt"]["host"])
+tl = Timeloop()
+formatter = logging.Formatter(config.get("log", "format", raw=True))
+logger = logging.getLogger(MQTT_CLIENT_ID)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter(config.get("log", "format", raw=True)))
+logger.addHandler(handler)
+ser = Serial(LORA_SERIAL_PORT_NAME)
+tl.start()
+
+
+@tl.job(interval=timedelta(seconds=LOG_JOB_INTERVAL_SEC))
+def log_job():
+    logger.info(f"Published messages: {published_messages}, Received packets: {received_packets}")
+
+
+ser.readline()
+while True:
+    values = ser.readline().decode().split()
+    received_packets += 1
+    data = {}
+    for i, value in enumerate(values):
+        topic = LORA_METRICS[i][0]
+        name = LORA_METRICS[i][1]
+        if topic not in data:
+            data[topic] = {}
+        new(data[topic], name, value, separator=".")
+    for key, value in data.items():
+        mqtt.publish(key, json.dumps(value))
