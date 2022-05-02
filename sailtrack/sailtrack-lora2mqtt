@@ -25,9 +25,9 @@ LORA_METRICS = (
     ("sensor/gps0", "lat"),
     ("sensor/gps0", "gSpeed"),
     ("sensor/gps0", "headMot"),
-    ("sensor/imu0", "orientation.heading"),
-    ("sensor/imu0", "orientation.pitch"),
-    ("sensor/imu0", "orientation.roll"),
+    ("sensor/imu0", "euler.x"),
+    ("sensor/imu0", "euler.y"),
+    ("sensor/imu0", "euler.z"),
 )
 
 LOG_JOB_INTERVAL_SEC = 1 / LOG_PRINT_FREQ_HZ
@@ -65,6 +65,7 @@ def log_job():
     logger.info(f"Published messages: {published_messages}, Received packets: {received_packets}")
 
 
+ser.readline()
 while True:
     values = ser.readline().decode().split()
     received_packets += 1
