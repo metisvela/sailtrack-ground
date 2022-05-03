@@ -24,11 +24,11 @@ LORA_METRICS = (
     ("sensor/gps0", "epoch"),
     ("sensor/gps0", "lon"),
     ("sensor/gps0", "lat"),
-    ("sensor/gps0", "gSpeed"),
-    ("sensor/gps0", "headMot"),
-    ("sensor/imu0", "euler.x"),
-    ("sensor/imu0", "euler.y"),
-    ("sensor/imu0", "euler.z"),
+    ("metric/boat", "sog"),
+    ("metric/boat", "cog"),
+    ("metric/boat", "heading"),
+    ("metric/boat", "pitch"),
+    ("metric/boat", "roll"),
 )
 
 LORA_JOB_INTERVAL_MS = 1000 / LORA_READ_FREQ_HZ
