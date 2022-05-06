@@ -49,12 +49,13 @@ def on_publish_callback(client, userdata, mid):
 
 config = ConfigParser()
 config.read(CONFIG_FILE_PATH)
+
 mqtt = Client(MQTT_CLIENT_ID)
 mqtt.username_pw_set(config["mqtt"]["username"], config["mqtt"]["password"])
 mqtt.on_publish = on_publish_callback
 mqtt.connect(config["mqtt"]["host"])
 mqtt.loop_start()
-tl = Timeloop()
+
 formatter = logging.Formatter(config.get("log", "format", raw=True))
 logging.getLogger("timeloop").handlers[0].setFormatter(formatter)
 logger = logging.getLogger(MQTT_CLIENT_ID)
@@ -62,7 +63,10 @@ logger.setLevel(logging.INFO)
 handler = logging.StreamHandler()
 handler.setFormatter(formatter)
 logger.addHandler(handler)
+
 ser = Serial(LORA_SERIAL_PORT_NAME, timeout=0)
+
+tl = Timeloop()
 
 
 @tl.job(interval=timedelta(milliseconds=LORA_JOB_INTERVAL_MS))
