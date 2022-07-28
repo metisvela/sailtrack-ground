@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "poweroff: permission denied"
+  exit
+fi
+
+BUTTON_PIN=13
+SLEEP_TIME_SEC=4
+
+echo $BUTTON_PIN > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio$BUTTON_PIN/direction
+
+echo "1" > /sys/class/gpio/gpio$BUTTON_PIN/value
+/bin/sleep $SLEEP_TIME_SEC
+echo "0" > /sys/class/gpio/gpio$BUTTON_PIN/value

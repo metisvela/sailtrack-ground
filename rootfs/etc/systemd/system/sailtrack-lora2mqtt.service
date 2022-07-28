@@ -2,6 +2,7 @@
 Description=SailTrack-LoRa2MQTT
 
 [Service]
+EnvironmentFile=-/etc/default/sailtrack
 Restart=on-failure
 ExecStart=/boot/sailtrack/sailtrack-lora2mqtt
 
