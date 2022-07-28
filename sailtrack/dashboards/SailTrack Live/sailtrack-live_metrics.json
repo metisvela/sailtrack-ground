@@ -176,7 +176,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.5.1",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
           "channel": "stream/sailtrack-data/boat",
@@ -243,7 +243,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.5.1",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
           "channel": "stream/sailtrack-data/boat",
@@ -346,7 +346,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "8.5.1",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
           "channel": "stream/sailtrack-data/boat",
@@ -383,6 +383,6 @@
   "timezone": "",
   "title": "Live Metrics",
   "uid": "jupYl5enz",
-  "version": 12,
+  "version": 1,
   "weekStart": ""
 }
