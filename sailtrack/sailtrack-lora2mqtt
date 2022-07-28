@@ -2,7 +2,7 @@
 
 import json
 import logging
-from configparser import ConfigParser
+import os
 from datetime import timedelta
 
 from dpath.util import new
@@ -16,7 +16,6 @@ LORA_READ_FREQ_HZ = 10
 LOG_PRINT_FREQ_HZ = 0.1
 
 MQTT_CLIENT_ID = "sailtrack-lora2mqtt"
-CONFIG_FILE_PATH = "/etc/sailtrack/sailtrack.conf"
 
 LORA_SERIAL_PORT_NAME = "/dev/serial0"
 LORA_METRICS = (
@@ -47,18 +46,15 @@ def on_publish_callback(client, userdata, mid):
     published_messages += 1
 
 
-config = ConfigParser()
-config.read(CONFIG_FILE_PATH)
-
 mqtt = Client(MQTT_CLIENT_ID)
-mqtt.username_pw_set(config["mqtt"]["username"], config["mqtt"]["password"])
+mqtt.username_pw_set("mosquitto", os.environ["SAILTRACK_GLOBAL_PASSWORD"])
 mqtt.on_publish = on_publish_callback
-mqtt.connect(config["mqtt"]["host"])
+mqtt.connect("localhost")
 mqtt.loop_start()
 
 tl = Timeloop()
 
-formatter = logging.Formatter(config.get("log", "format", raw=True))
+formatter = logging.Formatter("[%(levelname)s] %(message)s")
 logging.getLogger("timeloop").handlers[0].setFormatter(formatter)
 logger = logging.getLogger(MQTT_CLIENT_ID)
 logger.setLevel(logging.INFO)

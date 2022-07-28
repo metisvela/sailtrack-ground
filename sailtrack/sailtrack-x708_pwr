@@ -1,0 +1,32 @@
+#!/bin/bash
+
+SHUTDOWN_PIN=5
+BOOT_PIN=12
+REBOOT_PULSE_MIN_MS=200
+REBOOT_PULSE_MAX_MS=600
+
+echo $SHUTDOWN_PIN > /sys/class/gpio/export
+echo "in" > /sys/class/gpio/gpio$SHUTDOWN_PIN/direction
+echo $BOOT_PIN > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio$BOOT_PIN/direction
+echo "1" > /sys/class/gpio/gpio$BOOT_PIN/value
+
+while : ; do
+  signal=$(</sys/class/gpio/gpio$SHUTDOWN_PIN/value)
+  if [ "$signal" = 0 ]; then /bin/sleep 0.2
+  else
+    start=$(date +%s%N | cut -b1-13)
+    while [ "$signal" = 1 ]; do
+      /bin/sleep 0.02
+      if [ $(($(date +%s%N | cut -b1-13)-"$start")) -gt $REBOOT_PULSE_MAX_MS ]; then
+        sudo /usr/sbin/poweroff
+        exit
+      fi
+      signal=$(</sys/class/gpio/gpio$SHUTDOWN_PIN/value)
+    done
+    if [ $(($(date +%s%N | cut -b1-13)-"$start")) -gt $REBOOT_PULSE_MIN_MS ]; then
+      sudo /usr/sbin/reboot
+      exit
+    fi
+  fi
+done
