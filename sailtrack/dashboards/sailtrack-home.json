@@ -60,14 +60,15 @@
       },
       "id": 4,
       "options": {
-        "folderId": 1,
         "maxItems": 10,
         "query": "",
         "showHeadings": false,
         "showRecentlyViewed": false,
         "showSearch": true,
         "showStarred": false,
-        "tags": []
+        "tags": [
+          "live"
+        ]
       },
       "pluginVersion": "9.0.5",
       "transparent": true,
@@ -86,14 +87,15 @@
       },
       "id": 6,
       "options": {
-        "folderId": 5,
         "maxItems": 10,
         "query": "",
         "showHeadings": false,
         "showRecentlyViewed": false,
         "showSearch": true,
         "showStarred": false,
-        "tags": []
+        "tags": [
+          "history"
+        ]
       },
       "pluginVersion": "9.0.5",
       "transparent": true,

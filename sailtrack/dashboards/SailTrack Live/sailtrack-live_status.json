@@ -29,7 +29,9 @@
   "panels": [],
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "live"
+  ],
   "templating": {
     "list": []
   },

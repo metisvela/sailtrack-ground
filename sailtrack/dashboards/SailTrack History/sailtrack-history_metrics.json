@@ -652,7 +652,9 @@
   ],
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "history"
+  ],
   "templating": {
     "list": []
   },
