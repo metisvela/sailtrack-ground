@@ -24,6 +24,8 @@ G_EXEC /boot/dietpi/dietpi-services dietpi_controlled telegraf
 G_EXEC /boot/dietpi/dietpi-services dietpi_controlled sailtrack-lora2mqtt
 G_EXEC /boot/dietpi/dietpi-services dietpi_controlled sailtrack-timesync
 G_EXEC /boot/dietpi/dietpi-services dietpi_controlled sailtrack-tileserver
+G_EXEC /boot/dietpi/dietpi-services restart grafana-server
+G_EXEC sleep 5
 
 # Configure DietPi Banner
 G_EXEC touch /boot/dietpi/.dietpi-banner
