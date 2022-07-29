@@ -53,7 +53,7 @@ AUTO_SETUP_SWAPFILE_SIZE=1
 AUTO_SETUP_SWAPFILE_LOCATION=/var/swap
 
 # Set to "1" to disable HDMI/video output and framebuffers on Raspberry Pi, to reduce power consumption and memory usage: Works on RPi only!
-AUTO_SETUP_HEADLESS=1
+AUTO_SETUP_HEADLESS=0
 
 # Unmask (enable) systemd-logind service (including dbus), which is masked by default on DietPi
 AUTO_UNMASK_LOGIND=0
@@ -96,7 +96,7 @@ AUTO_SETUP_RAMLOG_MAXSIZE=50
 # - Webserver preference: 0=Apache | -1=Nginx | -2=Lighttpd
 AUTO_SETUP_WEB_SERVER_INDEX=0
 # - Desktop preference: 0=LXDE | -1=Xfce | -2=MATE | -3=LXQt | -4=GNUstep
-AUTO_SETUP_DESKTOP_INDEX=0
+AUTO_SETUP_DESKTOP_INDEX=-1
 # - Browser preference: 0=None | -1=Firefox | -2=Chromium
 AUTO_SETUP_BROWSER_INDEX=-1
 
@@ -134,6 +134,7 @@ AUTO_SETUP_INSTALL_SOFTWARE_ID=60   # WiFi Hotspot
 AUTO_SETUP_INSTALL_SOFTWARE_ID=123  # Mosquitto
 AUTO_SETUP_INSTALL_SOFTWARE_ID=74   # InfluxDB
 AUTO_SETUP_INSTALL_SOFTWARE_ID=77   # Grafana
+AUTO_SETUP_INSTALL_SOFTWARE_ID=25   # Xfce
 
 #------------------------------------------------------------------------------------------------------
 ##### Misc DietPi program settings #####
