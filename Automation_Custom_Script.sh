@@ -37,7 +37,7 @@ done
 # Configure passwords and keys
 GLOBAL_PASSWORD=$(openssl enc -d -a -md sha256 -aes-256-cbc -iter 10000 -salt -pass pass:'DietPiRocks!' -in /var/lib/dietpi/dietpi-software/.GLOBAL_PW.bin)
 GRAFANA_API_KEY=$(\
-  curl -s -X POST -H "Content-Type: application/json" -d '{"name":"sailtrack", "role": "Admin"}' "http://admin:$GLOBAL_PASSWORD@localhost:3001/api/auth/keys" | \
+  curl --retry 5 --retry-delay 5 --retry-connrefused -X POST -H "Content-Type: application/json" -d '{"name":"sailtrack", "role": "Admin"}' "http://admin:$GLOBAL_PASSWORD@localhost:3001/api/auth/keys" | \
   python3 -c "import sys, json; print(json.load(sys.stdin)['key'])" \
 )
 GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GLOBAL_PASSWORD=" "SAILTRACK_GLOBAL_PASSWORD=$GLOBAL_PASSWORD" /etc/default/sailtrack
