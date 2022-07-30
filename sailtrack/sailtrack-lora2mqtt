@@ -19,15 +19,14 @@ MQTT_CLIENT_ID = "sailtrack-lora2mqtt"
 
 LORA_SERIAL_PORT_NAME = "/dev/serial0"
 LORA_METRICS = (
-    ("sensor/gps0", "fixType"),
     ("sensor/gps0", "epoch"),
-    ("sensor/gps0", "lon"),
-    ("sensor/gps0", "lat"),
-    ("metric/boat", "sog"),
-    ("metric/boat", "cog"),
-    ("metric/boat", "heading"),
-    ("metric/boat", "pitch"),
-    ("metric/boat", "roll"),
+    ("boat", "lon"),
+    ("boat", "lat"),
+    ("boat", "sog"),
+    ("boat", "cog"),
+    ("boat", "heading"),
+    ("boat", "pitch"),
+    ("boat", "roll"),
 )
 
 LORA_JOB_INTERVAL_MS = 1000 / LORA_READ_FREQ_HZ

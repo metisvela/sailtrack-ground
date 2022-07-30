@@ -134,6 +134,7 @@ AUTO_SETUP_INSTALL_SOFTWARE_ID=60   # WiFi Hotspot
 AUTO_SETUP_INSTALL_SOFTWARE_ID=123  # Mosquitto
 AUTO_SETUP_INSTALL_SOFTWARE_ID=74   # InfluxDB
 AUTO_SETUP_INSTALL_SOFTWARE_ID=77   # Grafana
+AUTO_SETUP_INSTALL_SOFTWARE_ID=23   # LXDE
 AUTO_SETUP_INSTALL_SOFTWARE_ID=113  # Chromium
 
 #------------------------------------------------------------------------------------------------------
