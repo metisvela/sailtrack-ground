@@ -57,8 +57,6 @@ Follow the instructions below to get the SailTrack Ground OS correctly installed
 
 9. Wait until the `SailTrack-GroundNet` WiFi network is visible, meaning that the installation process has been successfully completed.
 
-10. Congratulations! You've successfully installed the SailTrack Ground OS.
-
 ## Usage
 
 Once the installation process has been successfully completed, you can use SailTrack Ground by following the steps below.
