@@ -1,0 +1,9 @@
+[Unit]
+Description=SailTrack-Kiosk
+
+[Service]
+Restart=on-failure
+ExecStart=/boot/sailtrack/sailtrack-kiosk
+
+[Install]
+WantedBy=multi-user.target
