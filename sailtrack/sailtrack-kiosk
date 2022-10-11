@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export DISPLAY=:0.0
+unclutter -display $DISPLAY -idle 5 &
+/usr/bin/grafana-kiosk -URL=http://192.168.42.1:3001/d/jupYl5enz/live-metrics -login-method=local -username=admin -password=sailtrack -kiosk-mode=tv
