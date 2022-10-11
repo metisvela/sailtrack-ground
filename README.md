@@ -12,7 +12,14 @@
 
 SailTrack Ground is the ground station of the SailTrack system, it receives, stores and visualizes real-time data coming from the boat via a radio link. To learn more about the SailTrack project, please visit the [documentation repository](https://github.com/metis-vela-unipd/sailtrack-docs).
 
-The SailTrack Ground module is based on a battery powered Raspberry Pi SBC running a custom version of the Raspberry Pi OS, namely, [DietPi](https://dietpi.com). For a more detailed hardware description of the module, please refer to the [Bill Of Materials](hardware/BOM.csv). The 3D-printable enclosure can be found [here](hardware/STL).
+The SailTrack Ground module is based on a battery powered Raspberry Pi SBC running a custom version of the Raspberry Pi OS, namely, [DietPi](https://dietpi.com). For a more detailed hardware description of the module, please refer to the [Bill Of Materials](hardware/BOM.csv).
+
+The module performs the following tasks:
+
+* It receives data coming from the boat using LoRa.
+* It creates the SailTrack Ground Network, the WiFi network to which connect in order to view the live dashboards.
+* It runs the [InfluxDB](https://www.influxdata.com) database, gathering all the measurements coming from the boat.
+* It runs the [Grafana](https://grafana.com) server, for the visualization of real-time and logged metrics.
 
 <p align="center">
   <br/>
@@ -24,46 +31,33 @@ The SailTrack Ground module is based on a battery powered Raspberry Pi SBC runni
 Follow the instructions below to get the SailTrack Ground OS correctly installed. If you encounter any problem, please [open an issue](https://github.com/metis-vela-unipd/sailtrack-ground/issues/new).
 
 1. [Download](https://github.com/metis-vela-unipd/sailtrack-ground/releases/latest/download/SailTrack-Ground_RPi-ARMv8-Bullseye.7z) and extract the latest SailTrack Ground OS image.
-
 2. Insert the Raspberry Pi microSD card into the computer.
-
 3. Flash the downloaded `.img` file into the SD card using a flashing tool such as [balenaEtcher](https://www.balena.io/etcher/).
-
 4. **(OPTIONAL)** Change the passwords from the default ones by modifying the `AUTO_SETUP_GLOBAL_PASSWORD` and the `SOFTWARE_WIFI_HOTSPOT_KEY` in the `dietpi.txt` file located inside the SD card.
-
 5. Eject the SD card from the computer and insert it into the Raspberry Pi.
-
 6. Connect the Raspberry Pi to internet with an ethernet cable.
-
 7. Power on the Raspberry Pi. The first run setup will automatically start to download and configure the required packages. *Note: this might take a few minutes, depending on the internet connection quality, follow the next step to check the installation progress.*
-
 8. **(OPTIONAL)** Check the installation progress:
-
    1. Connect to the Raspberry Pi using a device connected to the same network:
-
       ```
       ssh root@<raspberry-ip-address>
       ```
-
       The `<raspberry-ip-address>` can be found by checking the router administration dashboard or by using a tool such as [Angry IP Scanner](https://angryip.org). The password is the default one (`dietpi`) or the one set in Step 4.
-
    2. Dismiss the `DietPi first run setup is currently running on another screen` message by hitting <kbd>Ctrl</kbd> + <kbd>C</kbd>.
-
    3. Check the logs coming from the installation progress with the following command:
-
       ```
       tail -f /var/tmp/dietpi/logs/dietpi-firstrun-setup.log
       ```
-
 9. Wait until the `SailTrack-GroundNet` WiFi network is visible, meaning that the installation process has been successfully completed.
 
 ## Usage
 
 Once the installation process has been successfully completed, you can use SailTrack Ground by following the steps below.
 
-1. Power on the module by pressing the power push button. Once the WiFi network has been created, SailTrack Core will start collecting the measurements coming from the external modules.
-2. Connect to the `SailTrack-GroundNet` WiFi network with your pc, smartphone, tablet,....
+1. Power on the module by pressing the power push button. Once the module is powered up, it will automatically start to receive measurments from the boat.
+2. Connect to the `SailTrack-GroundNet` WiFi network with your pc, smartphone, tablet,... (password: `sailtracknet` or the one set in Step 4 of the installation).
 3. Visit http://192.168.42.1:3001 (user: `admin`, password: `dietpi` or the one set in Step 4 of the installation) to connect to the Grafana dashboards to see real-time data and browse the database. To learn more about using Grafana, visit the [official guide](https://grafana.com/docs/grafana/latest/getting-started/getting-started/).
+4. To power off the module press and hold the power push button of the Ground module until the power light starts blinking.
 
 ## Contributing
 
@@ -71,4 +65,4 @@ Pull requests are welcome. For major changes, please [open an issue](https://git
 
 ## License
 
-Copyright © 2022, [Métis Vela Unipd](https://github.com/metis-vela-unipd). SailTrack Core is available under the [GPL-3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html). See the LICENSE file for more info. 
+Copyright © 2022, [Métis Vela Unipd](https://github.com/metis-vela-unipd). SailTrack Ground is available under the [GPL-3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html). See the LICENSE file for more info. 
