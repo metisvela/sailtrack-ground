@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/github/license/metis-vela-unipd/sailtrack-ground" />
   <img src="https://img.shields.io/github/v/release/metis-vela-unipd/sailtrack-ground" />
-  <img src="https://img.shields.io/github/workflow/status/metis-vela-unipd/sailtrack-ground/Publish%20Release" />
+  <img src="https://img.shields.io/github/actions/workflow/status/metis-vela-unipd/sailtrack-ground/publish.yml" />
 </p>
 
 # SailTrack Ground
@@ -57,6 +57,7 @@ Once the installation process has been successfully completed, you can use SailT
 1. Power on the module by pressing the power push button. Once the module is powered up, it will automatically start to receive measurments from the boat.
 2. Connect to the `SailTrack-GroundNet` WiFi network with your pc, smartphone, tablet,... (password: `sailtracknet` or the one set in Step 4 of the installation).
 3. Visit http://192.168.42.1:3001 (user: `admin`, password: `dietpi` or the one set in Step 4 of the installation) to connect to the Grafana dashboards to see real-time data and browse the database. To learn more about using Grafana, visit the [official guide](https://grafana.com/docs/grafana/latest/getting-started/getting-started/).
+Alternatively, you can plug SailTrack Ground to a monitor with an HDMI cable and the real-time dashboard will automatically be displayed.
 4. To power off the module press and hold the power push button of the Ground module until the power light starts blinking.
 
 ## Contributing
