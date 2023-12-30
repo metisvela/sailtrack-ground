@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/metis-vela-unipd/sailtrack/main/assets/SailTrack%20Logo.svg" width="180">
+  <img src="https://raw.githubusercontent.com/metisvela/sailtrack/main/assets/sailtrack-logo.svg" width="180">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/github/license/metis-vela-unipd/sailtrack-ground" />
-  <img src="https://img.shields.io/github/v/release/metis-vela-unipd/sailtrack-ground" />
-  <img src="https://img.shields.io/github/actions/workflow/status/metis-vela-unipd/sailtrack-ground/publish.yml" />
+  <img src="https://img.shields.io/github/license/metisvela/sailtrack-ground" />
+  <img src="https://img.shields.io/github/v/release/metisvela/sailtrack-ground" />
+  <img src="https://img.shields.io/github/actions/workflow/status/metisvela/sailtrack-ground/publish.yml" />
 </p>
 
 # SailTrack Ground
 
-SailTrack Ground is the ground station of the SailTrack system, it receives, stores and visualizes real-time data coming from the boat via a radio link. To learn more about the SailTrack project, please visit the [project repository](https://github.com/metis-vela-unipd/sailtrack).
+SailTrack Ground is the ground station of the SailTrack system, it receives, stores and visualizes real-time data coming from the boat via a radio link. To learn more about the SailTrack project, please visit the [project repository](https://github.com/metisvela/sailtrack).
 
 The SailTrack Ground module is based on a battery powered Raspberry Pi SBC running a custom version of the Raspberry Pi OS, namely, [DietPi](https://dietpi.com). For a more detailed hardware description of the module, please refer to the [Bill Of Materials](hardware/BOM.csv).
 
@@ -28,9 +28,9 @@ The module performs the following tasks:
 
 ## Installation
 
-Follow the instructions below to get the SailTrack Ground OS correctly installed. If you encounter any problem, please [open an issue](https://github.com/metis-vela-unipd/sailtrack-ground/issues/new).
+Follow the instructions below to get the SailTrack Ground OS correctly installed. If you encounter any problem, please [open an issue](https://github.com/metisvela/sailtrack-ground/issues/new).
 
-1. [Download](https://github.com/metis-vela-unipd/sailtrack-ground/releases/latest/download/SailTrack-Ground_RPi-ARMv8-Bullseye.7z) and extract the latest SailTrack Ground OS image.
+1. [Download](https://github.com/metisvela/sailtrack-ground/releases/latest/download/SailTrack-Ground_RPi-ARMv8-Bullseye.7z) and extract the latest SailTrack Ground OS image.
 2. Insert the Raspberry Pi microSD card into the computer.
 3. Flash the downloaded `.img` file into the SD card using a flashing tool such as [balenaEtcher](https://www.balena.io/etcher/).
 4. **(OPTIONAL)** Change the passwords from the default ones by modifying the `AUTO_SETUP_GLOBAL_PASSWORD` and the `SOFTWARE_WIFI_HOTSPOT_KEY` in the `dietpi.txt` file located inside the SD card.
@@ -62,10 +62,10 @@ Alternatively, you can plug SailTrack Ground to a monitor with an HDMI cable and
 
 ## Contributing
 
-Contributors are welcome. If you are a student of the University of Padua, please apply for the Métis Vela Unipd team in the [website](http://metisvela.dii.unipd.it), specifying in the appliaction form that you are interested in contributing to the SailTrack Project. If you are not a student of the University of Padua, feel free to open Pull Requests and Issues to contribute to the project.
+Contributors are welcome. If you are a student of the University of Padova, please apply for the Metis Sailing Team in the [website](http://metisvela.dii.unipd.it), specifying in the appliaction form that you are interested in contributing to the SailTrack Project. If you are not a student of the University of Padova, feel free to open Pull Requests and Issues to contribute to the project.
 
 To learn more about contributing to this repository, check out the [Developer's Guide](DEVELOPER.md).
 
 ## License
 
-Copyright © 2023, [Métis Vela Unipd](https://github.com/metis-vela-unipd). SailTrack Ground is available under the [GPL-3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html). See the LICENSE file for more info. 
+Copyright © 2023, [Metis Sailing Team](https://github.com/metisvela). SailTrack Ground is available under the [GPL-3.0 license](https://www.gnu.org/licenses/gpl-3.0.en.html). See the LICENSE file for more info. 
