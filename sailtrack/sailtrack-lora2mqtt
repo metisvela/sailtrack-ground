@@ -6,7 +6,7 @@ import os
 from datetime import timedelta
 
 from dpath.util import new
-from paho.mqtt.client import Client
+from paho.mqtt.client import Client, CallbackAPIVersion
 from serial import Serial
 from timeloop import Timeloop
 
@@ -45,7 +45,7 @@ def on_publish_callback(client, userdata, mid):
     published_messages += 1
 
 
-mqtt = Client(MQTT_CLIENT_ID)
+mqtt = Client(CallbackAPIVersion.VERSION1, MQTT_CLIENT_ID)
 mqtt.username_pw_set("mosquitto", os.environ["SAILTRACK_GLOBAL_PASSWORD"])
 mqtt.on_publish = on_publish_callback
 mqtt.connect("localhost")
