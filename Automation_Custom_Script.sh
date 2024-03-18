@@ -1,3 +1,10 @@
+#!/bin/bash
+
+# `Automation_Custom_Script.sh` - Script that runs on the first boot of the OS. It finishes the installation and sets up
+# the necessary components for SailTrack. The logs of the script are automatically logged in
+# `/var/tmp/dietpi/logs/dietpi-firstrun-setup.log`.
+
+# Load DietiPi fucntions (G_* functions)
 . /boot/dietpi/func/dietpi-globals
 
 # Configure X708 HAT
@@ -22,13 +29,9 @@ G_CONFIG_INJECT "+ sailtrack-timesync" "+ sailtrack-timesync" /boot/dietpi/.diet
 G_CONFIG_INJECT "+ sailtrack-tileserver" "+ sailtrack-tileserver" /boot/dietpi/.dietpi-services_include_exclude
 G_CONFIG_INJECT "+ sailtrack-kiosk" "+ sailtrack-kiosk" /boot/dietpi/.dietpi-services_include_exclude
 G_EXEC /boot/dietpi/dietpi-services enable telegraf
-G_EXEC /boot/dietpi/dietpi-services start telegraf
 G_EXEC /boot/dietpi/dietpi-services enable sailtrack-lora2mqtt
-G_EXEC /boot/dietpi/dietpi-services start sailtrack-lora2mqtt
 G_EXEC /boot/dietpi/dietpi-services enable sailtrack-timesync
-G_EXEC /boot/dietpi/dietpi-services start sailtrack-timesync
 G_EXEC /boot/dietpi/dietpi-services enable sailtrack-tileserver
-G_EXEC /boot/dietpi/dietpi-services start sailtrack-kiosk
 
 # Configure DietPi Banner
 G_EXEC touch /boot/dietpi/.dietpi-banner
@@ -37,30 +40,36 @@ for i in "${!SETTINGS[@]}"; do
   G_CONFIG_INJECT "aENABLED\[$i]=" "aENABLED[$i]=${SETTINGS[$i]}" /boot/dietpi/.dietpi-banner
 done
 
-# Configure passwords and keys
+# Configure passwords and generate keys
 G_EXEC /boot/dietpi/dietpi-services restart grafana-server
-GLOBAL_PASSWORD=$(openssl enc -d -a -md sha256 -aes-256-cbc -iter 10000 -salt -pass pass:'DietPiRocks!' -in /var/lib/dietpi/dietpi-software/.GLOBAL_PW.bin)
-SERVICE_ACCOUNT_ID=$(\
-  curl --retry 10 --retry-delay 5 --retry-connrefused -s -X POST -H "Content-Type: application/json" -d '{"name":"telegraf", "role": "Admin"}' "http://admin:$GLOBAL_PASSWORD@localhost:3001/api/serviceaccounts" | \
+global_password=$(openssl enc -d -a -md sha256 -aes-256-cbc -iter 10000 -salt -pass pass:'DietPiRocks!' -in /var/lib/dietpi/dietpi-software/.GLOBAL_PW.bin)
+grafana_service_account_id=$(\
+  curl --retry 10 --retry-delay 5 --retry-connrefused -s -X POST -H "Content-Type: application/json" -d '{"name":"SailTrack", "role": "Admin"}' "http://admin:$global_password@localhost:3001/api/serviceaccounts" | \
   python3 -c "import sys, json; print(json.load(sys.stdin)['id'])" \
 )
-GRAFANA_API_KEY=$(\
-  curl --retry 10 --retry-delay 5 --retry-connrefused -s -X POST -H "Content-Type: application/json" -d '{"name":"telegraf-token"}' "http://admin:$GLOBAL_PASSWORD@localhost:3001/api/serviceaccounts/$SERVICE_ACCOUNT_ID/tokens" | \
+grafana_api_key=$(\
+  curl --retry 10 --retry-delay 5 --retry-connrefused -s -X POST -H "Content-Type: application/json" -d '{"name":"Telegraf"}' "http://admin:$global_password@localhost:3001/api/serviceaccounts/$grafana_service_account_id/tokens" | \
   python3 -c "import sys, json; print(json.load(sys.stdin)['key'])" \
 )
-GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GLOBAL_PASSWORD=" "SAILTRACK_GLOBAL_PASSWORD=$GLOBAL_PASSWORD" /etc/default/sailtrack
-GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GLOBAL_PASSWORD=" "SAILTRACK_GLOBAL_PASSWORD=$GLOBAL_PASSWORD" /etc/default/telegraf
-GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GRAFANA_API_KEY=" "SAILTRACK_GRAFANA_API_KEY=$GRAFANA_API_KEY" /etc/default/telegraf
+GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GLOBAL_PASSWORD=" "SAILTRACK_GLOBAL_PASSWORD=$global_password" /etc/default/sailtrack
+GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GLOBAL_PASSWORD=" "SAILTRACK_GLOBAL_PASSWORD=$global_password" /etc/default/telegraf
+GCI_PASSWORD=1 G_CONFIG_INJECT "SAILTRACK_GRAFANA_API_KEY=" "SAILTRACK_GRAFANA_API_KEY=$grafana_api_key" /etc/default/telegraf
 
-# Configure Telegraf
+# Generate the default telegraf configuration (the SailTrack configuration is loaded as a drop-in file under
+# `/etc/telegraf/telegraf.d`)
 telegraf --section-filter=agent config > /etc/telegraf/telegraf.conf
+# Remove the default "host" tag from the telegraf metrics
 G_CONFIG_INJECT "omit_hostname =" "  omit_hostname = true" /etc/telegraf/telegraf.conf
 
-# Configure Grafana
-G_EXEC curl --retry 10 --retry-delay 5 --retry-connrefused -s -X PUT -H "Content-Type: application/json" -d '{"name":"SailTrack"}' "http://admin:$GLOBAL_PASSWORD@localhost:3001/api/org"
-G_EXEC grafana-cli --pluginUrl=https://github.com/alexandrainst/alexandra-trackmap-panel/archive/master.zip plugins install alexandra-trackmap-panel
+# Create the "SailTrack" organization (required by Grafana)
+G_EXEC curl --retry 10 --retry-delay 5 --retry-connrefused -s -X PUT -H "Content-Type: application/json" -d '{"name":"SailTrack"}' "http://admin:$global_password@localhost:3001/api/org"
+# Install the third-party custom track map panel
+G_EXEC /usr/share/grafana/bin/grafana cli --pluginUrl=https://github.com/alexandrainst/alexandra-trackmap-panel/archive/master.zip plugins install alexandra-trackmap-panel
+# Allow the third-party plugin
 G_CONFIG_INJECT ";allow_loading_unsigned_plugins =" "allow_loading_unsigned_plugins = alexandra-trackmap-panel" /etc/grafana/grafana.ini
+# Enable the insertion of SVG files in Grafana panels (needed by the SailTrack logo in the home dashboard)
 G_CONFIG_INJECT ";disable_sanitize_html =" "disable_sanitize_html = true" /etc/grafana/grafana.ini
+# Set the default home dashboard to the SailTrack one
 G_CONFIG_INJECT ";default_home_dashboard_path =" "default_home_dashboard_path = /usr/share/sailtrack/dashboards/sailtrack-home.json" /etc/grafana/grafana.ini
 
 # Configure Display
