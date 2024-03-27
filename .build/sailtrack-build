@@ -4,7 +4,7 @@
 
 debian_release_name="Bookworm"
 dietpi_image_name="DietPi_RPi-ARMv8-$debian_release_name"
-sailtrack_image_name="SailTrack-Core_RPi-ARMv8-$debian_release_name"
+sailtrack_image_name="SailTrack-Ground_RPi-ARMv8-$debian_release_name"
 
 # Download and extract DietPi image
 wget -N "https://dietpi.com/downloads/images/$dietpi_image_name.img.xz" -P /tmp/sailtrack-build || exit 1
